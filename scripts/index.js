@@ -38,7 +38,23 @@ var UIController = (function() {
 // Main function that will tied to both of our modular functions (UIController, budgetController)
 var controller = (function(budgetCtrl, UICtrl) {
 
-    var DOM = UICtrl.getDOMStrings();
+    var setupEventListeners = function() {
+
+        var DOM = UICtrl.getDOMStrings();
+
+        document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
+
+        // The event parameter exists for all event listerners. We did not create it.
+        // event.which is to test for older browsers which do not have the keyCode property
+        document.addEventListener('keypress', function(event) {
+
+            if (event.keyCode === 13 || event.which === 13) {
+    
+                ctrlAddItem();
+                
+            }
+        })    
+    };
 
     var ctrlAddItem = function() {
 
@@ -55,17 +71,11 @@ var controller = (function(budgetCtrl, UICtrl) {
 
     }
 
-
-    document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
-
-    // The event parameter exists for all event listerners. We did not create it.
-    // event.which is to test for older browsers which do not have the keyCode property
-    document.addEventListener('keypress', function(event) {
-        if (event.keyCode === 13 || event.which === 13) {
-
-            ctrlAddItem();
-            
+    return {
+        init: function() {
+            console.log('Application has started.');
+            setupEventListeners();
         }
-    })
-  
+    };
+    
 }(budgetController, UIController));
